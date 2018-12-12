@@ -190,7 +190,14 @@ class Assets {
                   opt.headers || {}
                 );
 
-                return this.provider.request('S3', 'putObject', details);
+                return this.provider.request('S3', 'putObject', details)
+                  .then((data) => {
+                    this.log(`putObject completed without error, containing ${JSON.stringify(data)}`)
+                    return Promise.resolve();
+                  }).catch((err) => {
+                    this.log(`putObject errored, containing ${JSON.stringify(err)}`)
+                    return Promise.reject();
+                  });
               })
             })
           })
